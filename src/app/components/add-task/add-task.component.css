@@ -1,0 +1,11 @@
+.ng-autocomplete {
+    width: 100% !important;
+    display: table !important;
+    margin: 0 auto !important;
+}
+
+
+/*
+textarea {
+    resize: none;
+}*/

@@ -1,0 +1,40 @@
+<div class="container pt-4">
+    <div class="row m-2 text-center">
+        <div class="col-3">
+            <a routerLink="add-user" class="btn btn-success px-5"><i class="fa fa-user-plus" aria-hidden="true"></i> Ajouter</a>
+        </div>
+        <div class="col-9 alert alert-danger " [hidden]="!errors">{{errors}}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-light text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Department</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let x of data">
+
+                        <td>{{x.contact_first_name}} {{x.contact_last_name}}</td>
+                        <td>{{x.contact_email}}</td>
+                        <td>{{x.contact_phone}}</td>
+                        <td>{{x.contact_address1}}</td>
+                        <td>{{x.contact_department}}</td>
+                        <td>
+                            <a routerLink="user/id" class="btn btn-info mx-1"><i class="fa fa-info-circle text-white" aria-hidden="true">info</i></a>
+                            <a routerLink="user/id/edit/" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true">edit</i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

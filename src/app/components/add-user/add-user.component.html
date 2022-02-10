@@ -1,0 +1,83 @@
+<div class="card col-md-8 m-auto">
+    <div class="card-body">
+        <div class="d-flex text-center">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-add-user">
+                <h3 class="card-header p-3">Ajouter un utilisateur</h3>
+                <div class="alert alert-danger p-2" [hidden]="!errors">
+                    {{ errors }}
+                </div>
+                <div *ngIf="successMsg != null" class="alert alert-success mt-3">
+                    {{ successMsg?.message }}
+                </div>
+                <div class="p-2"></div>
+
+                <div class="form-group py-1">
+                    <input type="text" formControlName="user_username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['user_username'].errors }" placeholder="Nom d'utilisateur" autofocus required/>
+                    <div *ngIf="submitted && f['user_username'].errors" class="invalid-feedback">
+                        <div *ngIf="f['user_username'].errors['required']">User name is required</div>
+                    </div>
+                </div>
+
+                <div class="form-group py-1">
+                    <input type="password" formControlName="user_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['user_password'].errors }" placeholder="Mot de Passe" autofocus required/>
+                    <div *ngIf="submitted && f['user_password'].errors" class="invalid-feedback">
+                        <div *ngIf="f['user_password'].errors['required']">
+                            Password is required
+                        </div>
+                        <div *ngIf="f['user_password'].errors['minlength']">
+                            Password must be at least 6 characters
+                        </div>
+                        <div *ngIf="f['user_password'].errors['maxlength']">
+                            Password must not exceed 40 characters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group py-1">
+                    <input type="email" formControlName="contact_email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_email'].errors }" placeholder="Email" autofocus required/>
+                    <div *ngIf="submitted && f['contact_email'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_email'].errors['required']">Email is required</div>
+                        <div *ngIf="f['contact_email'].errors['contact_email']">Email is invalid</div>
+                    </div>
+                </div>
+                <div class="form-group py-1">
+                    <input type="text" formControlName="contact_first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_first_name'].errors }" placeholder="Nom" required/>
+                    <div *ngIf="submitted && f['contact_first_name'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_first_name'].errors['required']">First name is required</div>
+                    </div>
+                </div>
+                <div class="form-group py-1">
+                    <input type="text" formControlName="contact_last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_last_name'].errors }" placeholder="Prenom" required/>
+                    <div *ngIf="submitted && f['contact_last_name'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_last_name'].errors['required']">Last name is required</div>
+                    </div>
+                </div>
+                <div class="form-group py-1">
+                    <input type="text" formControlName="contact_phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_phone'].errors }" placeholder="Telephone" required/>
+                    <div *ngIf="submitted && f['contact_phone'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_phone'].errors['required']">Telephone is required</div>
+                    </div>
+                </div>
+                <div class="form-group py-1">
+                    <input type="text" formControlName="contact_address1" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_address1'].errors }" placeholder="Adresse" required/>
+                    <div *ngIf="submitted && f['contact_address1'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_address1'].errors['required']">Address is required</div>
+                    </div>
+                </div>
+                <div class="form-group py-1">
+                    <input type="text" formControlName="contact_department" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_department'].errors }" placeholder="Department" required/>
+                    <div *ngIf="submitted && f['contact_department'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contact_department'].errors['required']">Department is required</div>
+                    </div>
+                </div>
+
+                <div class="form-group p-2">
+                    <button type="submit" class="btn btn-primary m-2">Enregister</button>
+                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>

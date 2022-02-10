@@ -1,0 +1,14 @@
+.active {
+    background-color: #b1b1b1;
+    color: #FFFFFF !important;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.btn-deconnecter {
+    background-color: #6A1FFF;
+}
+
+.tic {
+    color: #00FC8E !important;
+}
