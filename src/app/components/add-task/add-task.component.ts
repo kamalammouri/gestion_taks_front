@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Observable, startWith, switchMap, map} from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import {ProjectsList } from 'src/app/interfaces/projects-list';
 @Component({
@@ -10,7 +9,6 @@ import {ProjectsList } from 'src/app/interfaces/projects-list';
   styleUrls: ['./add-task.component.css']
 })
 export class AddTaskComponent implements OnInit {
-
     form = new FormGroup({
     users_controlle: new FormControl(''),
     projects_controlle: new FormControl(''),
@@ -31,10 +29,15 @@ export class AddTaskComponent implements OnInit {
   keyword_users     = 'user_username';
   keyword_tasks     = 'task_name';
 
-  public today: any;
-  /* value for valid last input (task) */
-  isValid = false;
 
+  /* variable for date input */
+  public today: any;
+
+  public user_department: any;
+  public project_id: any;
+  /* variable for valid last input (task) */
+  isValid = false;
+  isValid_usernames = false;
   /* form validation and submitted */
   submitted = false;
   data: any;
@@ -68,7 +71,7 @@ export class AddTaskComponent implements OnInit {
         tasks_controlle: ['', [Validators.required]],
         date_controlle: ['', [Validators.required]],
         hours_controlle: ['', [Validators.required]],
-        title_controlle: ['', [Validators.required]],
+        title_controlle: ['',],
         description_controlle: ['', [Validators.required]],
       }
     );
@@ -79,22 +82,45 @@ export class AddTaskComponent implements OnInit {
     return this.form.controls;
   }
 
-  selectEvent(item:any) {
+  selectEventUsername(username:any) {
     // do something with selected item
-      this.authService.getTasksByPorject(item).subscribe(result => {
-      this.tasksList = result;
-      this.form.get('tasks_controlle')?.reset();
-    })
+    this.user_department=username.user_department;
+    this.getTasks();
+  }
+
+  onChangeSearchUsername(val: string){
+    console.log('search username Cleared');
+
+    this.form.get('projects_controlle')?.reset();
+    this.form.get('tasks_controlle')?.reset();
+  }
+  searchClearedUsername() {
+    console.log('search username Cleared');
+    this.form.get('tasks_controlle')?.reset();
+    this.isValid_usernames=false;
 
   }
-  onChangeSearch(val: string) {
+
+  selectEventProject(project:any,) {
+    this.project_id=project.project_id;
+    this.getTasks();
+  }
+  onChangeSearchProject(val: string) {
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
+    console.log('project changed');
+    this.form.get('tasks_controlle')?.reset();
+    this.tasksList = [];
   }
 
-  selectEventTasks(item:any) {
+  searchClearedProject() {
+    console.log('searchCleared');
+    this.form.get('tasks_controlle')?.reset();
+    this.tasksList = [];
+  }
+  selectEventTasks(task:any) {
     // do something with selected item
-    console.log(item);
+    console.log(task);
     this.isValid=true;
 
   }
@@ -104,6 +130,7 @@ export class AddTaskComponent implements OnInit {
   }
   onFocusedTasks(e:any){
     // do something when input is focused
+
   }
 
   onSubmit(): void {
@@ -129,7 +156,10 @@ export class AddTaskComponent implements OnInit {
     this.authService.insertTasklog(this.data2).subscribe(
       (result) => {
         this.successMsg = result;
-        setTimeout(() => {this.router.navigateByUrl("dashbord")}, 1500);
+        this.form.get('tasks_controlle')?.reset();
+        this.form.get('hours_controlle')?.reset();
+        this.form.get('title_controlle')?.reset();
+        this.form.get('description_controlle')?.reset();
       },
       (error) => {
         this.errors = error.error.message;
@@ -138,4 +168,17 @@ export class AddTaskComponent implements OnInit {
   }
 
 
+ getTasks(){
+  let data = {'user_department':this.user_department,'project_id':this.project_id};
+  console.log(data);
+  // do something with selected item
+    if(this.user_department && this.project_id){
+      this.authService.getTasksByPD(data)
+      .subscribe(result => {
+        this.tasksList = result;
+        console.log(this.tasksList);
+        this.form.get('tasks_controlle')?.reset();
+      });
+    }
+  }
 }

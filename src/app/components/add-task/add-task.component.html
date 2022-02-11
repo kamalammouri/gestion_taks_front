@@ -8,7 +8,7 @@
                 <div *ngIf="successMsg != null" class="alert alert-success mt-3 text-center">
                     {{ successMsg?.message }}
                 </div>
-                <h3 class="card-header p-3 text-center">Ajouter une tache</h3>
+                <h2 class="card-header p-3 text-center">Ajouter votre tache</h2>
                 <!--
                 <div class="form-group p-1">
                     <select formControlName="users" class="form-select form-control my-1" aria-label="userList" id="userList">
@@ -20,7 +20,8 @@
                   -->
 
                 <div class="form-group my-1">
-                    <ng-autocomplete class="form-control" [data]="usersList" [searchKeyword]="keyword_users" placeholder="Choisire un utilisateur" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" formControlName="users_controlle" [ngClass]="{ 'is-invalid': submitted && f['users_controlle'].errors }">
+                    <ng-autocomplete class="form-control" [data]="usersList" [searchKeyword]="keyword_users" placeholder="Choisir un utilisateur" (selected)='selectEventUsername($event)' (inputChanged)='onChangeSearchUsername($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
+                        formControlName="users_controlle" [ngClass]="{ 'is-invalid': submitted && f['users_controlle'].errors }" (inputCleared)="searchClearedUsername()">
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate let-item>
@@ -33,8 +34,8 @@
                 </div>
 
                 <div class="form-group my-1">
-                    <ng-autocomplete class="form-control" [data]="projectsList" [searchKeyword]="keyword_projects" placeholder="Trouve un Projet" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate2" formControlName="projects_controlle"
-                        [ngClass]="{ 'is-invalid': submitted && f['projects_controlle'].errors }" [notFoundTemplate]="notFoundTemplate">
+                    <ng-autocomplete class="form-control" [data]="projectsList" [searchKeyword]="keyword_projects" placeholder="Projet" (inputCleared)="searchClearedProject()" (selected)='selectEventProject($event)' (inputChanged)='onChangeSearchProject($event)' [itemTemplate]="itemTemplate2"
+                        formControlName="projects_controlle" [ngClass]="{ 'is-invalid': submitted && f['projects_controlle'].errors }" [notFoundTemplate]="notFoundTemplate">
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate2 let-project>
@@ -47,7 +48,7 @@
                 </div>
 
                 <div class="form-group my-1">
-                    <ng-autocomplete class="form-control" [data]="tasksList" [searchKeyword]="keyword_tasks" placeholder="Entre votre taches" (selected)='selectEventTasks($event)' (inputChanged)='onChangeSearchTasks($event)' (inputFocused)='onFocusedTasks($event)' [itemTemplate]="itemTemplate3"
+                    <ng-autocomplete class="form-control" [data]="tasksList" [searchKeyword]="keyword_tasks" placeholder="Tache" (selected)='selectEventTasks($event)' (inputChanged)='onChangeSearchTasks($event)' (inputFocused)='onFocusedTasks($event)' [itemTemplate]="itemTemplate3"
                         [notFoundTemplate]="notFoundTemplate" formControlName="tasks_controlle" [ngClass]="{ 'is-invalid': submitted && f['tasks_controlle'].errors }">
                     </ng-autocomplete>
 
@@ -62,18 +63,18 @@
 
                 <div [hidden]="!isValid">
 
-                    <div class="from-group p-1 w-100">
+                    <div class="from-group p-1">
                         <input name="date" [(ngModel)]="today" class="form-control" type="date" id="date_task " formControlName="date_controlle" [ngClass]="{ 'is-invalid': submitted && f['date_controlle'].errors }" required>
                     </div>
 
                     <div class="from-group p-1 ">
-                        <input class="form-control " type="text " name="hours_task " id="hours_task " formControlName="hours_controlle" placeholder="Entre votre Hrs" [ngClass]="{ 'is-invalid': submitted && f['hours_controlle'].errors }" required>
+                        <input class="form-control " type="text " name="hours_task " id="hours_task " formControlName="hours_controlle" placeholder="Saisir un temps" [ngClass]="{ 'is-invalid': submitted && f['hours_controlle'].errors }" required>
                     </div>
                     <div class="form-group p-1 ">
-                        <input class="form-control my-1" type="text " name="hours_task " id="title_task " formControlName="title_controlle" placeholder="Titre de description" [ngClass]="{ 'is-invalid': submitted && f['title_controlle'].errors }" required>
+                        <input class="form-control my-1" type="text " name="hours_task " id="title_task " formControlName="title_controlle" placeholder="Titre">
                     </div>
                     <div class="form-group p-1 ">
-                        <textarea id="description_task" name="description" rows="4 " cols="50 " class="form-control " formControlName="description_controlle" placeholder="Entre votre Description" [ngClass]="{ 'is-invalid': submitted && f['description_controlle'].errors }" required></textarea>
+                        <textarea id="description_task" name="description" rows="4 " cols="50 " class="form-control " formControlName="description_controlle" placeholder="Travail accompli" [ngClass]="{ 'is-invalid': submitted && f['description_controlle'].errors }" required></textarea>
                     </div>
 
                     <div class="form-group p-2 mb-5 mt-2">

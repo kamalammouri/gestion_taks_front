@@ -33,15 +33,20 @@ export class AuthService {
     return this.http.get<ProjectsList[]>(environment.api+'getProject');
   }
 
-  getTasksByPorject(id:any){
+  /*getTasksByPorject(id:any){
     return this.http.post(environment.api+'getTasksByProject',id);
+  }*/
+
+  getTasksByPD(data:any){
+    return this.http.post(environment.api+'getTasksbyPD',data);
   }
 
-  getTasks(){
-    return this.http.get(environment.api+'getTasks');
-  }
 
   insertTasklog(data:any){
     return this.http.post(environment.api+'insertTasklog',data);
+  }
+
+  getTasklogs(date:any){
+    return this.http.post(environment.api+'getTasklog',date);
   }
 }

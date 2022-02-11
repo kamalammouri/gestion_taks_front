@@ -18,9 +18,13 @@ export class UsersComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private toastr: ToastrService
-    ) { }
+    ) {
+
+    }
 
   ngOnInit(): void {
+
+
     this.authService.contacts().subscribe(
       (result) => {
         this.data = result;
