@@ -1,6 +1,7 @@
-<div class="card col-md-8 m-auto">
-    <div class="card-body">
-        <div class="d-flex text-center">
+<div class="container">
+    <div class="row pt-5 justify-content-center ">
+        <div class="col-lg-6 col-md-12 text-center">
+
             <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-add-user">
                 <h2 class="card-header p-3">Ajouter un utilisateur</h2>
                 <div class="alert alert-danger p-2" [hidden]="!errors">
@@ -19,7 +20,7 @@
                 </div>
 
                 <div class="form-group py-1">
-                    <input type="password" formControlName="user_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['user_password'].errors }" placeholder="Mot de Passe" autofocus required/>
+                    <input type="password" formControlName="user_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['user_password'].errors }" placeholder="Mot de passe" autofocus required/>
                     <div *ngIf="submitted && f['user_password'].errors" class="invalid-feedback">
                         <div *ngIf="f['user_password'].errors['required']">
                             Password is required
@@ -47,13 +48,13 @@
                     </div>
                 </div>
                 <div class="form-group py-1">
-                    <input type="text" formControlName="contact_last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_last_name'].errors }" placeholder="Prenom" required/>
+                    <input type="text" formControlName="contact_last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_last_name'].errors }" placeholder="Prénom" required/>
                     <div *ngIf="submitted && f['contact_last_name'].errors" class="invalid-feedback">
                         <div *ngIf="f['contact_last_name'].errors['required']">Last name is required</div>
                     </div>
                 </div>
                 <div class="form-group py-1">
-                    <input type="text" formControlName="contact_phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_phone'].errors }" placeholder="Telephone" required/>
+                    <input type="text" formControlName="contact_phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_phone'].errors }" placeholder="Téléphone" required/>
                     <div *ngIf="submitted && f['contact_phone'].errors" class="invalid-feedback">
                         <div *ngIf="f['contact_phone'].errors['required']">Telephone is required</div>
                     </div>
@@ -65,15 +66,18 @@
                     </div>
                 </div>
                 <div class="form-group py-1">
-                    <input type="text" formControlName="contact_department" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['contact_department'].errors }" placeholder="Department" required/>
+                    <select formControlName="contact_department" class="form-select" [ngClass]="{ 'is-invalid': submitted && f['contact_department'].errors }" required>
+            <option value="" disabled selected hidden>Département</option>
+            <option *ngFor="let department of departments" [ngValue]="department.dept_id">{{department.dept_name}}</option>
+        </select>
                     <div *ngIf="submitted && f['contact_department'].errors" class="invalid-feedback">
                         <div *ngIf="f['contact_department'].errors['required']">Department is required</div>
                     </div>
                 </div>
 
                 <div class="form-group p-2">
-                    <button type="submit" class="btn btn-primary m-2">Enregister</button>
-                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+                    <button type="submit" class="btn btn-primary m-2">Enregistrer</button>
+                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Annuler</button>
                 </div>
 
 
@@ -81,3 +85,4 @@
 
         </div>
     </div>
+</div>

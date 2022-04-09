@@ -1,23 +1,8 @@
 <div class="container">
     <div class="row pt-5 justify-content-center">
-        <div class="col-6">
+        <div class="col-lg-6 col-md-12">
             <form [formGroup]="form" class="form-task" (ngSubmit)="onSubmit()">
-                <div class="alert alert-danger text-center" [hidden]="!errors">
-                    {{ errors }}
-                </div>
-                <div *ngIf="successMsg != null" class="alert alert-success mt-3 text-center">
-                    {{ successMsg?.message }}
-                </div>
-                <h2 class="card-header p-3 text-center">Ajouter votre tache</h2>
-                <!--
-                <div class="form-group p-1">
-                    <select formControlName="users" class="form-select form-control my-1" aria-label="userList" id="userList">
-                      <option *ngFor="let user of usersList" [value]="user.user_username">
-                        {{user.user_username}}
-                      </option>
-                   </select>
-                </div>
-                  -->
+                <h2 class="card-header p-3 text-center">Ajouter votre tâche</h2>
 
                 <div class="form-group my-1">
                     <ng-autocomplete class="form-control" [data]="usersList" [searchKeyword]="keyword_users" placeholder="Choisir un utilisateur" (selected)='selectEventUsername($event)' (inputChanged)='onChangeSearchUsername($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
@@ -48,8 +33,8 @@
                 </div>
 
                 <div class="form-group my-1">
-                    <ng-autocomplete class="form-control" [data]="tasksList" [searchKeyword]="keyword_tasks" placeholder="Tache" (selected)='selectEventTasks($event)' (inputChanged)='onChangeSearchTasks($event)' (inputFocused)='onFocusedTasks($event)' [itemTemplate]="itemTemplate3"
-                        [notFoundTemplate]="notFoundTemplate" formControlName="tasks_controlle" [ngClass]="{ 'is-invalid': submitted && f['tasks_controlle'].errors }">
+                    <ng-autocomplete [disabled]="!isValid_usernames" class="form-control" [data]="tasksList" [searchKeyword]="keyword_tasks" placeholder="Tâche" (selected)='selectEventTasks($event)' (inputChanged)='onChangeSearchTasks($event)' (inputFocused)='onFocusedTasks($event)'
+                        [itemTemplate]="itemTemplate3" [notFoundTemplate]="notFoundTemplate" formControlName="tasks_controlle" [ngClass]="{ 'is-invalid': submitted && f['tasks_controlle'].errors }">
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate3 let-task>
@@ -68,17 +53,17 @@
                     </div>
 
                     <div class="from-group p-1 ">
-                        <input class="form-control " type="text " name="hours_task " id="hours_task " formControlName="hours_controlle" placeholder="Saisir un temps" [ngClass]="{ 'is-invalid': submitted && f['hours_controlle'].errors }" required>
+                        <input class="form-control" type="number" step="0.01" min="0" max="10" name="hours_task " id="hours_task " formControlName="hours_controlle" placeholder="Durée  Exp : 1 ou 1.5" [ngClass]="{ 'is-invalid': submitted && f['hours_controlle'].errors }" required>
                     </div>
                     <div class="form-group p-1 ">
-                        <input class="form-control my-1" type="text " name="hours_task " id="title_task " formControlName="title_controlle" placeholder="Titre">
+                        <input class="form-control my-1" type="text" name="hours_task " id="title_task " formControlName="title_controlle" placeholder="Titre">
                     </div>
                     <div class="form-group p-1 ">
-                        <textarea id="description_task" name="description" rows="4 " cols="50 " class="form-control " formControlName="description_controlle" placeholder="Travail accompli" [ngClass]="{ 'is-invalid': submitted && f['description_controlle'].errors }" required></textarea>
+                        <textarea id="description_task" name="description" rows="4 " cols="50 " class="form-control " formControlName="description_controlle" placeholder="Description" [ngClass]="{ 'is-invalid': submitted && f['description_controlle'].errors }" required></textarea>
                     </div>
 
                     <div class="form-group p-2 mb-5 mt-2">
-                        <button type="submit " class="btn btn-primary form-control ">Enregister</button>
+                        <button type="button" (click)="onSubmit()" class="btn btn-primary form-control ">Enregister</button>
                     </div>
                 </div>
 

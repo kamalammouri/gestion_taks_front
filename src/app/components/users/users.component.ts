@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from 'src/app/services/auth.service';
-import { ContactsList } from 'src/app/interfaces/contacts-list'
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -17,15 +16,18 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private toastr: ToastrService
-    ) {
-
-    }
+    private toast: HotToastService
+    ) {}
 
   ngOnInit(): void {
 
 
-    this.authService.contacts().subscribe(
+    this.authService.contacts().pipe(
+      this.toast.observe({
+        loading: 'Chargement...',
+        success: 'Liste des utilisateurs',
+        error: 'Error.',
+      })).subscribe(
       (result) => {
         this.data = result;
         this.totalLengh = this.data.length;
@@ -33,7 +35,6 @@ export class UsersComponent implements OnInit {
       },
       (error) => {
         this.errors = error.error.message;
-        this.toastr.error(this.errors);
       }
     );
   }

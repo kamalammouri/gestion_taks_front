@@ -5,6 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { CommonModule } from "@angular/common";
+import { HotToastModule } from '@ngneat/hot-toast';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+
+import { Placement as PopperPlacement, Options } from '@popperjs/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +39,9 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     AddTaskComponent
   ],
   imports: [
+    NgbModule,
+    HotToastModule.forRoot(),
+    CommonModule,
     AutocompleteLibModule,
     MatFormFieldModule,
     MatInputModule,

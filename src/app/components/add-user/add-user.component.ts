@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl,FormBuilder, FormControl, FormGroup, Validators, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-add-user',
@@ -25,7 +25,7 @@ export class AddUserComponent implements OnInit {
 
   submitted = false;
   data: any ;
-
+  departments:any;
   public errors:any=null;
   public successMsg:any=null;
 
@@ -33,10 +33,12 @@ export class AddUserComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toast: HotToastService
     ) { }
 
   ngOnInit(): void {
+
+    this.getDepartment();
 
     this.form = this.formBuilder.group(
       {
@@ -67,17 +69,26 @@ export class AddUserComponent implements OnInit {
       return;
     }
 
-   this.authService.add_user(this.form.value).subscribe(
+    this.addUser(this.form.value);
+  }
+
+  addUser(data:any) {
+    this.authService.add_user(data).pipe(
+      this.toast.observe({
+        loading: 'Chargement...',
+        success: 'l\'utilisateur a été ajouté!',
+        error: 'Error utilisateur n\'a pas ajouté.',
+      })).subscribe(
+        result => { setTimeout(() => {this.router.navigateByUrl("users")}, 2000)
+      });
+  }
+
+  getDepartment(){
+    this.authService.getDepartment().subscribe(
       (result) => {
-        this.successMsg = result;
-        setTimeout(() => {this.router.navigateByUrl("users")}, 1500);
-        console.log(this.successMsg);
-      },
-      (error) => {
-        this.errors = error.error.message;
-      }
-    );
-    console.log(this.form.value);
+        this.departments = result;
+        console.log(this.departments);
+      });
   }
 
   onReset() {
@@ -85,6 +96,5 @@ export class AddUserComponent implements OnInit {
     this.form.reset();
     this.router.navigateByUrl('users');
   }
-
 
 }

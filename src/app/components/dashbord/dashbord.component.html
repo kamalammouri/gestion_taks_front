@@ -1,41 +1,127 @@
 <div class="container pt-5">
     <div class="row p-3">
+        <div class="col-lg-6 col-sm-10 d-flex justify-content-around align-middle">
+            <div class="col-lg-5 py-1">
+                <input id="date" name="date" [max]="max" [(ngModel)]="today" type="date" id="date" ngModel (ngModelChange)="dateChanged($event)">
+            </div>
+            <div class="col-lg-5 py-1">
+                <ng-autocomplete [disabled]="!disableDepartment" [(ngModel)]="clearDepartment" [data]="departments" [searchKeyword]="keyword_departments" placeholder="Choisir un département" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" (selected)='selectEvent($event)'
+                    (inputCleared)="searchCleared()">
+                </ng-autocomplete>
 
-        <div class="col-3">
-            <input name="date" [(ngModel)]="today" type="date" id="date" ngModel (ngModelChange)="dateChanged($event)">
+                <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.dept_name"></a>
+                </ng-template>
+
+                <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                </ng-template>
+            </div>
         </div>
-
     </div>
+
     <div class="row">
         <div class="alert alert-danger text-center" [hidden]="!errors">
             {{ errors }}
         </div>
-        <div class="col-lg-4" *ngFor="let x of data">
-            <div class="card card-margin">
-                <div class="card-header no-border">
-                    <h2 class="card-title">Nom de l'utilisateur: {{x.task_log_creator}}</h2>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="widget-49">
-                        <div class="widget-49-title-wrapper">
-                            <div class="widget-49-date-primary" [ngClass]="{'widget-49-date-success ': x.task_log_hours>=3,'widget-49-date-warning' :  x.task_log_hours<=3,'widget-49-date-danger' : x.task_log_hours<=1}">
-                                <span class="widget-49-date-day">{{x.task_log_hours}}</span>
-                                <span class="widget-49-date-month">Hrs</span>
+        <div class="row text-center">
+
+            <!-- Team item -->
+            <div class="col-xl-3 col-lg-4 col-sm-6 mb-5" *ngFor="let x of data">
+
+                <div class="bg-white rounded shadow-sm pt-4">
+                    <img [src]="x.picture" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h2 class="mb-0">{{x.user_username}}</h2>
+                    <span class="small text-uppercase text-muted" id="department">
+                      {{x.dept_name}}
+                    </span>
+
+                    <div class="row justify-content-center p-2">
+                        <div class="col-6 text-center p-2 d-flex justify-content-around text-secondary">
+                            <div class="total_tache">
+                                <div class="widget-49-date widget-success">
+                                    <span class="widget-49-date-day">{{x.tasks.length}}</span>
+                                    <span class="widget-49-date-month">Tch</span>
+                                </div>
                             </div>
-                            <div class="widget-49-meeting-info">
-                                <span class="widget-49-pro-title">Nom de tache : {{x.task_log_task}}</span>
+                            <div class="bar"></div>
+                            <div class="total_houre">
+
+                                <div class="widget-49-date widget-warning">
+                                    <span class="widget-49-date-day">{{x.totalHours}}</span>
+                                    <span class="widget-49-date-month">Hrs</span>
+                                </div>
+
                             </div>
                         </div>
-                        <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item"><span>description : {{x.task_log_description}}</span></li>
-                        </ol>
-                        <!--<div class="widget-49-meeting-action">
-                        <a href="#" class="btn btn-sm btn-flash-border-primary">View All</a>
-                    </div>-->
+                    </div>
+                    <div *ngFor="let task of x.tasks">
+                        <ngb-accordion [closeOthers]="true">
+                            <ngb-panel id="static-1" [title]="task.task_log_name">
+                                <ng-template ngbPanelContent>
+                                    <div class="row d-flex  align-items-center">
+                                        <div class="col-9 align-middle">
+                                            <ol class="meeting-points">
+
+                                                <li class="meeting-item pb-1 " *ngFor="let subTasks of task.task_log_description" data-bs-toggle="tooltip" data-bs-placement="top" [title]="subTasks.task_log_hours+' h'">
+                                                    <span class="editLog" data-bs-toggle="modal" data-bs-target="#editLog" (click)="editLog(subTasks)">{{subTasks.task_log_description}}</span>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                        <div class="col-3 align-middle">
+                                            <div class="widget-49-date widget-danger">
+                                                <span class="widget-49-date-day">{{task.hours}}</span>
+                                                <span class="widget-49-date-month">Hrs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ngb-panel>
+                        </ngb-accordion>
                     </div>
                 </div>
             </div>
+            <!-- End -->
         </div>
+    </div>
+</div>
 
+<div class="modal fade" id="editLog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title text-centre" id="exampleModalLabel">Modifier la tâche</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form [formGroup]="logDetail">
+                    <div class="mb-3">
+                        <label for="task_log_name" class="form-label">Titre :</label>
+                        <input type="text" placeholder="Titre de la tâche" formControlName="task_log_name" class="form-control" id="task_log_name" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="task_log_description" class="form-label">Description :</label>
+                        <input type="email" placeholder="Description de la tâche" formControlName="task_log_description" class="form-control" id="email" aria-describedby="emailHelp" [ngClass]="{ 'is-invalid': submitted && f['task_log_description'].errors }" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="task_log_hours" class="form-label">Durée :</label>
+                        <input type="number" step="0.01" min="0" max="10" placeholder="Heure de tâche" formControlName="task_log_hours" class="form-control" id="task_log_hours" aria-describedby="emailHelp" [ngClass]="{ 'is-invalid': submitted && f['task_log_hours'].errors }"
+                            required>
+                    </div>
+                    <div class="from-group p-1">
+                        <label for="task_log_date" class="form-label">Date :</label>
+                        <input name="task_log_date" class="form-control" type="date" id="task_log_date " formControlName="task_log_date" [ngClass]="{ 'is-invalid': submitted && f['task_log_date'].errors }" required>
+                    </div>
+                    <div class="modal-footer d-flex">
+                        <button type="button" class="btn btn-danger me-auto p-2 bd-highlight" (click)="deletetaskLog()" data-bs-dismiss="modal">Supprimer</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #fermer>Fermer</button>
+                        <button type="button" class="btn btn-outline-success" (click)="updatetaskLog()">Enregistrer</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>

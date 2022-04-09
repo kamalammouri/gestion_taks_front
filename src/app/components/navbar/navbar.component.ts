@@ -10,6 +10,11 @@ export class NavbarComponent implements OnInit {
   public admin:any=null;
   constructor() { }
 
+  navbarOpen = false;
+
+  toggleNavbar() {
+    this.navbarOpen = !this.navbarOpen;
+  }
   ngOnInit(): void {
   }
 

@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import {ProjectsList } from 'src/app/interfaces/projects-list';
+import { HotToastService } from '@ngneat/hot-toast';
+
 @Component({
   selector: 'add-task',
   templateUrl: './add-task.component.html',
@@ -22,7 +24,7 @@ export class AddTaskComponent implements OnInit {
   /* List data from api */
   usersList:any;
   projectsList:any[]=[];
-  tasksList:any;
+  tasksList:any[]=[];
 
   /* Keyword for searching in data List per input  */
   keyword_projects  = 'project_name';
@@ -48,7 +50,8 @@ export class AddTaskComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toast: HotToastService
     ) {
 
    }
@@ -93,12 +96,15 @@ export class AddTaskComponent implements OnInit {
 
     this.form.get('projects_controlle')?.reset();
     this.form.get('tasks_controlle')?.reset();
+    this.tasksList = [];
+
   }
   searchClearedUsername() {
     console.log('search username Cleared');
     this.form.get('tasks_controlle')?.reset();
-    this.isValid_usernames=false;
 
+    this.tasksList = [];
+    this.isValid_usernames=false;
   }
 
   selectEventProject(project:any,) {
@@ -117,6 +123,7 @@ export class AddTaskComponent implements OnInit {
     console.log('searchCleared');
     this.form.get('tasks_controlle')?.reset();
     this.tasksList = [];
+    this.isValid_usernames=false;
   }
   selectEventTasks(task:any) {
     // do something with selected item
@@ -153,32 +160,48 @@ export class AddTaskComponent implements OnInit {
       "task_log_description": this.data['description_controlle']
     };
 
-    this.authService.insertTasklog(this.data2).subscribe(
-      (result) => {
-        this.successMsg = result;
-        this.form.get('tasks_controlle')?.reset();
-        this.form.get('hours_controlle')?.reset();
-        this.form.get('title_controlle')?.reset();
-        this.form.get('description_controlle')?.reset();
-      },
-      (error) => {
-        this.errors = error.error.message;
-      });
-
+      this.authService.insertTasklog(this.data2).pipe(
+        this.toast.observe({
+          loading: 'Chargement...',
+          success: 'la tache a été ajouté!',
+          error: 'Error la tache n\'a pas ajouté',
+        })).subscribe( (result) => { this.formCleared() });
   }
 
+  //clear form after submited
+  formCleared(){
+    this.form.get('tasks_controlle')?.reset();
+    this.form.get('hours_controlle')?.reset();
+    this.form.get('title_controlle')?.reset();
+    this.form.get('description_controlle')?.reset();
+    this.form.get('tasks_controlle')?.setErrors(null);
+    this.form.get('hours_controlle')?.setErrors(null);
+    this.form.get('title_controlle')?.setErrors(null);
+    this.form.get('description_controlle')?.setErrors(null);
+  }
 
  getTasks(){
   let data = {'user_department':this.user_department,'project_id':this.project_id};
   console.log(data);
   // do something with selected item
-    if(this.user_department && this.project_id){
-      this.authService.getTasksByPD(data)
-      .subscribe(result => {
+    if(this.user_department!=null && this.project_id!=null){
+      this.authService.getTasksByPD(data).pipe(
+        this.toast.observe({
+          loading: 'Chargement...',
+          success: 'les taches disponible!',
+          error: 'Aucune tache disponible',
+        })).subscribe(
+        (result) => {
+        this.tasksList=[];
+        this.form.get('tasks_controlle')?.reset();
         this.tasksList = result;
         console.log(this.tasksList);
-        this.form.get('tasks_controlle')?.reset();
-      });
+        this.isValid_usernames=true;
+        },
+        (error) => {
+          this.errors = error.error.message;
+        });
+
     }
   }
 }
