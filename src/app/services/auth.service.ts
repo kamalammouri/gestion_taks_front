@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { ContactsList } from '../interfaces/contacts-list';
 import { ProjectsList } from '../interfaces/projects-list';
+import { UserInfo } from '../interfaces/user-info';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,11 @@ export class AuthService {
     return this.http.post(environment.api+'login',data);
   }
 
+  logout(){
+    return this.http.get(environment.api+'logout');
+  }
+
+
   add_user(user:any) {
     return this.http.post(environment.api+'add_user',user);
   }
@@ -25,8 +31,12 @@ export class AuthService {
     return this.http.get<any>(environment.api+'contacts');
   }
 
-  getUsers(){
+  /*getUsers(){
     return this.http.get(environment.api+'getUsers');
+  }*/
+
+  getUserId(id:any): Observable<UserInfo[]>{
+    return this.http.post<UserInfo[]>(environment.api+'getUserId',id);
   }
 
   getProject(): Observable<ProjectsList[]>{

@@ -1,15 +1,23 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {NgbAccordionConfig} from '@ng-bootstrap/ng-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
+import { NgxSpinnerService } from "ngx-spinner";
+import { TokenService } from 'src/app/services/token.service';
+import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/services/auth-state.service';
 declare var window: any;
 @Component({
   selector: 'app-dashbord',
   templateUrl: './dashbord.component.html',
-  styleUrls: ['./dashbord.component.css']
+  styleUrls: ['./dashbord.component.css'],
+  providers: [ NgbAccordionConfig ]
 })
 export class DashbordComponent implements OnInit {
+  modalRef?: BsModalRef;
   logDetail !: FormGroup;
   logObj : any;
   formModal: any;
@@ -26,19 +34,42 @@ export class DashbordComponent implements OnInit {
     clearDepartment:any;
     disableDepartment:any=false;
 
+    userEdit:boolean=false;
     logEditData:any;
 
     errors:any=null;
+    loggedIn:any=false;
 
     constructor(
+
+    private router: Router,
+    private tokenService: TokenService,
     private authService: AuthService,
+    private authState: AuthStateService,
     private toast: HotToastService,
     private formBuilder : FormBuilder,
+    config: NgbAccordionConfig,
+    private spinner: NgxSpinnerService,
+    private modalService: BsModalService,
     ) {
       this.max = this.today = new Date().toISOString().split('T')[0];
+      config.closeOthers = true;
+      config.type = 'info';
     }
 
   ngOnInit(): void {
+
+    if (!this.tokenService.loggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if(this.tokenService.ExipredToken()){
+      this.tokenService.remove();
+      this.authState.setAuthState(false);
+      this.router.navigate(['/login']);
+      return;
+    }
 
     this.formModal = new window.bootstrap.Modal(
       document.getElementById('editLog')
@@ -69,29 +100,27 @@ export class DashbordComponent implements OnInit {
 
   selectEvent(department:any) {
     // do something with selected item
-    console.log(department.dept_name);
     this.filtreData = [];
     this.data = this.filtreDepartment(department.dept_name);
-    console.log(this.data);
   }
 
   searchCleared() {
-    console.log('department cleared');
     this.data = this.datafix;
-    console.log(this.data);
   }
 
 
   getTasklogs(data:any){
+    this.spinner.show();
     this.errors = null;
     this.authService.getTasklogs(data).subscribe(
       (result) => {
         this.data = this.datafix = result;
         this.disableDepartment=true;
-        console.log(this.data);
+        this.spinner.hide();
       },(error) => {
         this.errors = error.error.message;
         this.disableDepartment=false;
+        this.spinner.hide();
       });
   }
 
@@ -118,7 +147,12 @@ export class DashbordComponent implements OnInit {
 
   /////////////////// task log edit 7/////////////
 editLog(taskLog : any) {
+  if(taskLog.task_log_creator==this.tokenService.getUserId()){
+    this.userEdit=true;
+  }else{
+    this.userEdit=false;
 
+  }
   this.logObj=null;
   this.logDetail.controls['task_log_id'].setValue(taskLog.task_log_id);
   this.logDetail.controls['task_log_hours'].setValue(taskLog.task_log_hours);
@@ -127,6 +161,7 @@ editLog(taskLog : any) {
   this.logDetail.controls['task_log_date'].setValue(taskLog.task_log_date.split(' ')[0]);
 
   this.logObj = this.logDetail.value;
+
 }
 
 updatetaskLog() {
@@ -142,7 +177,6 @@ updatetaskLog() {
         success: 'La modification est faite',
         error: 'Problème de la modification.',
       })).subscribe(res=>{
-      console.log(res);
       this.data=[];
       this.getTasklogs({ date : this.today });
       this.formModal.hide();
@@ -154,7 +188,7 @@ updatetaskLog() {
 }
 
 deletetaskLog() {
-  console.log(this.logObj.task_log_id);
+
   this.authService.deleteTasklog({"task_log_id":this.logObj.task_log_id}).pipe(
     this.toast.observe({
       loading: 'Chargement...',
@@ -162,10 +196,21 @@ deletetaskLog() {
       error: 'Problème en suppression de la tâche.',
     })).subscribe(
     res=>{
-      console.log(res);
       this.getTasklogs({ date : this.today });
+      this.data=[];
+      this.modalRef?.hide();
+      this.formModal.hide();
   });
 
+}
+
+
+openModal(template: TemplateRef<any>) {
+  this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+}
+
+decline(): void {
+  this.modalRef?.hide();
 }
 
 }

@@ -1,11 +1,25 @@
+* {
+    transition: all 0.5s;
+}
+
+.navbar-toggler {
+    color: #00FC88 !important;
+}
+
+.navbar {
+    background-color: #6A1FFF !important;
+    color: #FFFFFF !important;
+}
+
 .active {
-    background-color: #6A1FFF;
+    background-color: #00FC88;
     color: #ffffff !important;
     border-radius: 5px;
     margin: 0 5px;
     font-size: 1.2rem;
 }
 
-img {
-    border-radius: 5px;
+.disconet {
+    justify-content: center !important;
+    transition: all 0.5s;
 }

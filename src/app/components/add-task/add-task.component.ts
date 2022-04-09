@@ -2,8 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import {ProjectsList } from 'src/app/interfaces/projects-list';
 import { HotToastService } from '@ngneat/hot-toast';
+import { TokenService } from 'src/app/services/token.service';
+import { AuthStateService } from 'src/app/services/auth-state.service';
 
 @Component({
   selector: 'add-task',
@@ -12,7 +13,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 })
 export class AddTaskComponent implements OnInit {
     form = new FormGroup({
-    users_controlle: new FormControl(''),
+    //users_controlle: new FormControl(''),
     projects_controlle: new FormControl(''),
     tasks_controlle: new FormControl(''),
     date_controlle: new FormControl(''),
@@ -23,12 +24,13 @@ export class AddTaskComponent implements OnInit {
 
   /* List data from api */
   usersList:any;
+  usersInfo:any;
   projectsList:any[]=[];
   tasksList:any[]=[];
 
   /* Keyword for searching in data List per input  */
   keyword_projects  = 'project_name';
-  keyword_users     = 'user_username';
+  //keyword_users     = 'user_username';
   keyword_tasks     = 'task_name';
 
 
@@ -51,15 +53,34 @@ export class AddTaskComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private toast: HotToastService
+    private toast: HotToastService,
+    private tokenService: TokenService,
+    private authState: AuthStateService,
     ) {
-
    }
 
   ngOnInit(){
-    this.authService.getUsers().subscribe(result => {
-      this.usersList = result;
+
+    if (!this.tokenService.loggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if(this.tokenService.ExipredToken()){
+      this.tokenService.remove();
+      this.authState.setAuthState(false);
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.authService.getUserId({'user_id':this.tokenService.getUserId()}).subscribe(result => {
+      this.usersInfo = result;
     });
+
+    /*this.authService.getUsers().subscribe(result => {
+      this.usersList = result;
+    });*/
+
 
     this.authService.getProject().subscribe(result => {
       this.projectsList=result;
@@ -69,7 +90,7 @@ export class AddTaskComponent implements OnInit {
 
     this.form = this.formBuilder.group(
       {
-        users_controlle: ['', [Validators.required]],
+        //users_controlle: ['', [Validators.required]],
         projects_controlle: ['', [Validators.required]],
         tasks_controlle: ['', [Validators.required]],
         date_controlle: ['', [Validators.required]],
@@ -84,7 +105,7 @@ export class AddTaskComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
-
+/*
   selectEventUsername(username:any) {
     // do something with selected item
     this.user_department=username.user_department;
@@ -106,7 +127,7 @@ export class AddTaskComponent implements OnInit {
     this.tasksList = [];
     this.isValid_usernames=false;
   }
-
+*/
   selectEventProject(project:any,) {
     this.project_id=project.project_id;
     this.getTasks();
@@ -114,22 +135,19 @@ export class AddTaskComponent implements OnInit {
   onChangeSearchProject(val: string) {
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
-    console.log('project changed');
     this.form.get('tasks_controlle')?.reset();
     this.tasksList = [];
   }
 
   searchClearedProject() {
-    console.log('searchCleared');
     this.form.get('tasks_controlle')?.reset();
     this.tasksList = [];
     this.isValid_usernames=false;
   }
+
   selectEventTasks(task:any) {
     // do something with selected item
-    console.log(task);
     this.isValid=true;
-
   }
   onChangeSearchTasks(val: string) {
     // fetch remote data from here
@@ -152,19 +170,18 @@ export class AddTaskComponent implements OnInit {
 
     this.data= this.form.value;
     this.data2={
-      "task_log_creator": this.data['users_controlle'].user_id,
+      "task_log_creator": this.usersInfo.user_id,
       "task_log_task": this.data['tasks_controlle'].task_id,
       "task_log_date": this.data['date_controlle'],
       "task_log_hours": this.data['hours_controlle'],
       "task_log_name": this.data['title_controlle'],
       "task_log_description": this.data['description_controlle']
     };
-
       this.authService.insertTasklog(this.data2).pipe(
         this.toast.observe({
           loading: 'Chargement...',
-          success: 'la tache a été ajouté!',
-          error: 'Error la tache n\'a pas ajouté',
+          success: 'la tâche a été ajouté!',
+          error: 'Error la tâche n\'a pas ajouté',
         })).subscribe( (result) => { this.formCleared() });
   }
 
@@ -181,25 +198,25 @@ export class AddTaskComponent implements OnInit {
   }
 
  getTasks(){
-  let data = {'user_department':this.user_department,'project_id':this.project_id};
-  console.log(data);
+  let data = {'user_department':this.usersInfo.user_department,'project_id':this.project_id};
   // do something with selected item
-    if(this.user_department!=null && this.project_id!=null){
+    if(this.usersInfo.user_department!=null && this.project_id!=null){
       this.authService.getTasksByPD(data).pipe(
         this.toast.observe({
           loading: 'Chargement...',
-          success: 'les taches disponible!',
-          error: 'Aucune tache disponible',
+          success: 'Tâches disponible!',
+          error: 'Aucune tâche disponible',
         })).subscribe(
         (result) => {
         this.tasksList=[];
         this.form.get('tasks_controlle')?.reset();
         this.tasksList = result;
-        console.log(this.tasksList);
         this.isValid_usernames=true;
+        console.log(this.tasksList);
         },
         (error) => {
           this.errors = error.error.message;
+          this.isValid_usernames=false;
         });
 
     }

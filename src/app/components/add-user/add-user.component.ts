@@ -3,6 +3,8 @@ import { AbstractControl,FormBuilder, FormControl, FormGroup, Validators, Valida
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { HotToastService } from '@ngneat/hot-toast';
+import { TokenService } from 'src/app/services/token.service';
+import { AuthStateService } from 'src/app/services/auth-state.service';
 
 @Component({
   selector: 'app-add-user',
@@ -33,10 +35,24 @@ export class AddUserComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private toast: HotToastService
+    private toast: HotToastService,
+    private tokenService: TokenService,
+    private authState: AuthStateService,
     ) { }
 
   ngOnInit(): void {
+
+    if (!this.tokenService.loggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if(this.tokenService.ExipredToken()){
+      this.tokenService.remove();
+      this.authState.setAuthState(false);
+      this.router.navigate(['/login']);
+      return;
+    }
 
     this.getDepartment();
 
@@ -87,7 +103,6 @@ export class AddUserComponent implements OnInit {
     this.authService.getDepartment().subscribe(
       (result) => {
         this.departments = result;
-        console.log(this.departments);
       });
   }
 

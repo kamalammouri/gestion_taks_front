@@ -34,6 +34,31 @@
     border: non;
     border-radius: 2px;
     box-shadow: 0 2px 3px rgb(0 0 0 / 16%), 0 1px 1px rgb(0 0 0 / 23%);
+    -webkit-box-shadow: 0 2px 3px rgb(0 0 0 / 16%), 0 1px 1px rgb(0 0 0 / 23%);
+    -moz-box-shadow: 0 2px 3px rgb(0 0 0 / 16%), 0 1px 1px rgb(0 0 0 / 23%);
+}
+
+.boxshadox {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+
+.widget-primary {
+    background-color: #edf1fc;
+}
+
+.widget-day-primary {
+    color: #4e73e5;
+    font-weight: 500;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.widget-month-primary {
+    color: #4e73e5;
+    line-height: 1;
+    font-size: 0.8rem;
 }
 
 .widget-49-date {
@@ -41,14 +66,14 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 3rem;
-    height: 3rem;
+    width: 3.2rem;
+    height: 3.2rem;
     border-radius: 50%;
 }
 
 .widget-49-date-day {
     font-weight: 500;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     line-height: 1;
 }
 

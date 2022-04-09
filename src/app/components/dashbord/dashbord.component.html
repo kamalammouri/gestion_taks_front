@@ -1,4 +1,8 @@
 <div class="container pt-5">
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+        <p style="font-size: 20px; color: rgb(255, 255, 255)">Chargement...</p>
+    </ngx-spinner>
+
     <div class="row p-3">
         <div class="col-lg-6 col-sm-10 d-flex justify-content-around align-middle">
             <div class="col-lg-5 py-1">
@@ -29,8 +33,8 @@
             <!-- Team item -->
             <div class="col-xl-3 col-lg-4 col-sm-6 mb-5" *ngFor="let x of data">
 
-                <div class="bg-white rounded shadow-sm pt-4">
-                    <img [src]="x.picture" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                <div class="bg-white rounded shadow-sm pt-4 boxshadox">
+                    <img src="./assets/img/profile-min.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                     <h2 class="mb-0">{{x.user_username}}</h2>
                     <span class="small text-uppercase text-muted" id="department">
                       {{x.dept_name}}
@@ -38,17 +42,18 @@
 
                     <div class="row justify-content-center p-2">
                         <div class="col-6 text-center p-2 d-flex justify-content-around text-secondary">
-                            <div class="total_tache">
+                            <!--  <div class="total_tache">
                                 <div class="widget-49-date widget-success">
                                     <span class="widget-49-date-day">{{x.tasks.length}}</span>
                                     <span class="widget-49-date-month">Tch</span>
                                 </div>
                             </div>
+                            -->
                             <div class="bar"></div>
-                            <div class="total_houre">
+                            <div class="total_houre m-auto ">
 
-                                <div class="widget-49-date widget-warning">
-                                    <span class="widget-49-date-day">{{x.totalHours}}</span>
+                                <div class="widget-49-date" [ngClass]="{'widget-danger': x.totalHours<=5 ,'widget-warning': x.totalHours < 7.5 && x.totalHours>5 , 'widget-success': x.totalHours >= 7.5}">
+                                    <span class="widget-49-date-day">{{x.totalHours.toFixed(2)}}</span>
                                     <span class="widget-49-date-month">Hrs</span>
                                 </div>
 
@@ -56,23 +61,24 @@
                         </div>
                     </div>
                     <div *ngFor="let task of x.tasks">
-                        <ngb-accordion [closeOthers]="true">
-                            <ngb-panel id="static-1" [title]="task.task_log_name">
+                        <ngb-accordion [closeOthers]="true" #acc="ngbAccordion">
+                            <ngb-panel id="static-1">
+                                <ng-template ngbPanelTitle>
+                                    <span><span class="small text-uppercase text-muted ms-1">{{task.project_short_name}} > </span>{{task.task_log_name}} </span>
+                                </ng-template>
                                 <ng-template ngbPanelContent>
                                     <div class="row d-flex  align-items-center">
                                         <div class="col-9 align-middle">
                                             <ol class="meeting-points">
-
                                                 <li class="meeting-item pb-1 " *ngFor="let subTasks of task.task_log_description" data-bs-toggle="tooltip" data-bs-placement="top" [title]="subTasks.task_log_hours+' h'">
                                                     <span class="editLog" data-bs-toggle="modal" data-bs-target="#editLog" (click)="editLog(subTasks)">{{subTasks.task_log_description}}</span>
                                                 </li>
-
                                             </ol>
                                         </div>
                                         <div class="col-3 align-middle">
-                                            <div class="widget-49-date widget-danger">
-                                                <span class="widget-49-date-day">{{task.hours}}</span>
-                                                <span class="widget-49-date-month">Hrs</span>
+                                            <div class="widget-49-date widget-primary">
+                                                <span class="widget-day-primary">{{task.hours}}</span>
+                                                <span class="widget-month-primary">Hr</span>
                                             </div>
                                         </div>
                                     </div>
@@ -99,25 +105,25 @@
                 <form [formGroup]="logDetail">
                     <div class="mb-3">
                         <label for="task_log_name" class="form-label">Titre :</label>
-                        <input type="text" placeholder="Titre de la tâche" formControlName="task_log_name" class="form-control" id="task_log_name" aria-describedby="emailHelp">
+                        <input type="text" placeholder="Titre vide" formControlName="task_log_name" class="form-control" id="task_log_name" aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
                         <label for="task_log_description" class="form-label">Description :</label>
-                        <input type="email" placeholder="Description de la tâche" formControlName="task_log_description" class="form-control" id="email" aria-describedby="emailHelp" [ngClass]="{ 'is-invalid': submitted && f['task_log_description'].errors }" required>
+                        <textarea id="description_task" name="description" rows="4 " cols="50 " class="form-control " formControlName="task_log_description" placeholder="Description vide" [ngClass]="{ 'is-invalid': submitted && f['task_log_description'].errors }" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="task_log_hours" class="form-label">Durée :</label>
-                        <input type="number" step="0.01" min="0" max="10" placeholder="Heure de tâche" formControlName="task_log_hours" class="form-control" id="task_log_hours" aria-describedby="emailHelp" [ngClass]="{ 'is-invalid': submitted && f['task_log_hours'].errors }"
+                        <input type="number" step="0.01" min="0" max="10" placeholder="Durée  Exp : 1 - 1.5 ou 1.25" formControlName="task_log_hours" class="form-control" id="task_log_hours" aria-describedby="emailHelp" [ngClass]="{ 'is-invalid': submitted && f['task_log_hours'].errors }"
                             required>
                     </div>
                     <div class="from-group p-1">
                         <label for="task_log_date" class="form-label">Date :</label>
-                        <input name="task_log_date" class="form-control" type="date" id="task_log_date " formControlName="task_log_date" [ngClass]="{ 'is-invalid': submitted && f['task_log_date'].errors }" required>
+                        <input name="task_log_date" [max]="max" class="form-control" type="date" id="task_log_date " formControlName="task_log_date" [ngClass]="{ 'is-invalid': submitted && f['task_log_date'].errors }" required>
                     </div>
                     <div class="modal-footer d-flex">
-                        <button type="button" class="btn btn-danger me-auto p-2 bd-highlight" (click)="deletetaskLog()" data-bs-dismiss="modal">Supprimer</button>
+                        <button *ngIf="this.userEdit" type="button" class="btn btn-outline-danger me-auto p-2 bd-highlight" (click)="openModal(templateConfirme)">Supprimer</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #fermer>Fermer</button>
-                        <button type="button" class="btn btn-outline-success" (click)="updatetaskLog()">Enregistrer</button>
+                        <button *ngIf="this.userEdit" type="button" class="btn btn-outline-success" (click)="updatetaskLog() ">Enregistrer</button>
                     </div>
                 </form>
 
@@ -125,3 +131,12 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #templateConfirme class="pt-5" [hidden]="!this.userEdit">
+    <div class="modal-body text-center">
+        <p>Voulez-vous confirmer ?</p>
+        <button type="button" class="btn btn-danger mx-1" (click)="deletetaskLog()">Oui</button>
+        <button type="button" class="btn btn-primary mx-1" (click)="decline()">Non</button>
+    </div>
+</ng-template>

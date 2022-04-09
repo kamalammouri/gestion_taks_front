@@ -3,10 +3,6 @@
     box-sizing: border-box;
 }
 
-#notfound {
-    height: 100%;
-}
-
 #notfound .notfound {
     position: absolute;
     left: 50%;
