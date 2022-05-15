@@ -7,16 +7,17 @@ import { DashbordComponent } from './components/dashbord/dashbord.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
+import { GeneraleGuard } from './guard/generale.guard';
 
 export const routes: Routes = [
   { path:  "",                       redirectTo:"/dashbord", pathMatch: "full"},
-  { path:  "dashbord",               component:DashbordComponent},
   { path:  "login",                  component:LoginComponent},
-  { path:  "register",               component:RegisterComponent},
-  { path:  "users/add-user",         component:AddUserComponent},
-  { path:  "users",                  component:UsersComponent},
-  { path:  "add-task",                  component:AddTaskComponent},
-  { path:  "**",                     component:NotFoundComponent},
+  { path:  "register",               component:RegisterComponent, canActivate : [GeneraleGuard]},
+  { path:  "dashbord",               component:DashbordComponent, canActivate : [GeneraleGuard]},
+  { path:  "add-task",               component:AddTaskComponent, canActivate : [GeneraleGuard]},
+  { path:  "users",                  component:UsersComponent, canActivate : [GeneraleGuard]},
+  { path:  "users/add-user",         component:AddUserComponent, canActivate : [GeneraleGuard]},
+  { path:  "**",                     component:NotFoundComponent, canActivate : [GeneraleGuard]},
 ]
 
 @NgModule({

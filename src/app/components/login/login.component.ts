@@ -82,13 +82,13 @@ export class LoginComponent implements OnInit {
         this.successMsg = result;
         setTimeout(() => { this.router.navigateByUrl("dashbord") }, 1500);
         this.tokenService.set(this.successMsg.access_token);
+        this.authState.setAuthState(true);
+        this.router.navigate(['dashbord']);
       },
       (error) => {
         this.errors = error.error.message;
       },() => {
-        this.authState.setAuthState(true);
         this.form.reset()
-        this.router.navigate(['dashbord']);
       }
       );
   }

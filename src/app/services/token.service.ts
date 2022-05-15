@@ -24,9 +24,9 @@ export class TokenService {
   isValid(){
     const token = this.get();
     if(token){
-      const payload =this.payload(token);
+      const payload = this.payload(token);
       if(payload){
-        return (payload.iss==="https://sdt.mobiletic.com/api/login")?true:false;
+        return (payload.iss==="https://sdt.mobiletic.com/api/login" || payload.iss==="http://127.0.0.1:8000/api/login")?true:false;
       }
     }
     return false;
@@ -42,7 +42,7 @@ export class TokenService {
   }
 
   loggedIn(){
-    return this.isValid();
+    return this.isValid() && this.ExipredToken();
   }
 
 

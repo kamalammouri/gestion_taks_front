@@ -26,16 +26,16 @@ export class UsersComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    if(this.tokenService.ExipredToken()){
-      this.tokenService.remove();
-      this.authState.setAuthState(false);
-      this.router.navigate(['/login']);
-    };
+    // if(this.tokenService.ExipredToken()){
+    //   this.tokenService.remove();
+    //   this.authState.setAuthState(false);
+    //   this.router.navigate(['/login']);
+    // };
 
-    if (!this.tokenService.loggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    // if (!this.tokenService.loggedIn()) {
+    //   this.router.navigate(['/login']);
+    //   return;
+    // }
 
     this.authService.contacts().pipe(
       this.toast.observe({

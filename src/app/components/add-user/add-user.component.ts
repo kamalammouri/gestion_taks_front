@@ -42,17 +42,17 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (!this.tokenService.loggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    // if (!this.tokenService.loggedIn()) {
+    //   this.router.navigate(['/login']);
+    //   return;
+    // }
 
-    if(this.tokenService.ExipredToken()){
-      this.tokenService.remove();
-      this.authState.setAuthState(false);
-      this.router.navigate(['/login']);
-      return;
-    }
+    // if(this.tokenService.ExipredToken()){
+    //   this.tokenService.remove();
+    //   this.authState.setAuthState(false);
+    //   this.router.navigate(['/login']);
+    //   return;
+    // }
 
     this.getDepartment();
 

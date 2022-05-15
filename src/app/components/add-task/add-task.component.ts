@@ -61,17 +61,17 @@ export class AddTaskComponent implements OnInit {
 
   ngOnInit(){
 
-    if (!this.tokenService.loggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    // if (!this.tokenService.loggedIn()) {
+    //   this.router.navigate(['/login']);
+    //   return;
+    // }
 
-    if(this.tokenService.ExipredToken()){
-      this.tokenService.remove();
-      this.authState.setAuthState(false);
-      this.router.navigate(['/login']);
-      return;
-    }
+    // if(this.tokenService.ExipredToken()){
+    //   this.tokenService.remove();
+    //   this.authState.setAuthState(false);
+    //   this.router.navigate(['/login']);
+    //   return;
+    // }
 
     this.authService.getUserId({'user_id':this.tokenService.getUserId()}).subscribe(result => {
       this.usersInfo = result;
