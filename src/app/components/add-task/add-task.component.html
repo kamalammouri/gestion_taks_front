@@ -20,35 +20,36 @@
                         <div [innerHTML]="notFound"></div>
                     </ng-template>
                 </div>-->
-
-
                 <div class="form-group my-1">
-                    <ng-autocomplete class="pb-2" [data]="projectsList" [searchKeyword]="keyword_projects" placeholder="Projet" (inputCleared)="searchClearedProject()" (selected)='selectEventProject($event)' (inputChanged)='onChangeSearchProject($event)' [itemTemplate]="itemTemplate2"
-                        formControlName="projects_controlle" [ngClass]="{ 'is-invalid': submitted && f['projects_controlle'].errors }" [notFoundTemplate]="notFoundTemplate">
+                    <ng-autocomplete class="pb-2" [data]="projectsList" [searchKeyword]="keyword_projects" placeholder="Projet" (inputCleared)="searchClearedProject()" (selected)='selectEventProject($event)' (inputChanged)='onChangeSearchProject($event)' [itemTemplate]="projectTemplate"
+                        formControlName="projects_controlle" [notFoundTemplate]="projectNotFoundTemplate" [ngClass]="{ 'autoComplete-invalid': submitted && f['projects_controlle'].errors }">
                     </ng-autocomplete>
-
-                    <ng-template #itemTemplate2 let-project>
+                    <ng-template #projectTemplate let-project>
                         <a [innerHTML]="project.project_name"></a>
                     </ng-template>
-
-                    <ng-template #notFoundTemplate let-notFound>
-                        <div [innerHTML]="notFound"></div>/
+                    <ng-template #projectNotFoundTemplate let-projectNotFound>
+                        <div [innerHTML]="projectNotFound"></div>/
                     </ng-template>
                 </div>
 
                 <div class="form-group my-1">
                     <ng-autocomplete [disabled]="!isValid_usernames" class="pb-2" [data]="tasksList" [searchKeyword]="keyword_tasks" placeholder="Tâche" (selected)='selectEventTasks($event)' (inputChanged)='onChangeSearchTasks($event)' (inputFocused)='onFocusedTasks($event)'
-                        [itemTemplate]="itemTemplate3" [notFoundTemplate]="notFoundTemplate" formControlName="tasks_controlle" [ngClass]="{ 'is-invalid': submitted && f['tasks_controlle'].errors }">
+                        [itemTemplate]="taskTemplate" [notFoundTemplate]="taskNotFoundTemplate" formControlName="tasks_controlle" [ngClass]="{ 'autoComplete-invalid': submitted && f['tasks_controlle'].errors }">
                     </ng-autocomplete>
 
-                    <ng-template #itemTemplate3 let-task>
+                    <ng-template #taskTemplate let-task>
                         <a [innerHTML]="task.task_name" [ngClass]="{'mobiletic text-white ': task.is_mine==true}"></a>
                     </ng-template>
 
-                    <ng-template #notFoundTemplate let-notFound>
-                        <div [innerHTML]="notFound"></div>
+                    <ng-template #taskNotFoundTemplate let-taskNotFound>
+                        <div [innerHTML]="taskNotFound"></div>
                     </ng-template>
                 </div>
+
+
+
+
+
 
                 <div *ngIf="isValid">
 

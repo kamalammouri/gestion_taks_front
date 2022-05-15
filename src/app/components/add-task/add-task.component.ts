@@ -135,13 +135,14 @@ export class AddTaskComponent implements OnInit {
   onChangeSearchProject(val: string) {
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
-    this.form.get('tasks_controlle')?.reset();
-    this.tasksList = [];
+    // this.form.get('tasks_controlle')?.reset();
+    this.tasksList.length = 0;
+    this.isValid_usernames=false;
   }
 
   searchClearedProject() {
-    this.form.get('tasks_controlle')?.reset();
-    this.tasksList = [];
+    // this.form.get('tasks_controlle')?.reset();
+    this.tasksList.length = 0;
     this.isValid_usernames=false;
   }
 
@@ -168,8 +169,8 @@ export class AddTaskComponent implements OnInit {
       return;
     }
 
-    this.data= this.form.value;
-    this.data2={
+    this.data = this.form.value;
+    this.data2 ={
       "task_log_creator": this.usersInfo.user_id,
       "task_log_task": this.data['tasks_controlle'].task_id,
       "task_log_date": this.data['date_controlle'],
@@ -182,7 +183,7 @@ export class AddTaskComponent implements OnInit {
           loading: 'Chargement...',
           success: 'la tâche a été ajouté!',
           error: 'Error la tâche n\'a pas ajouté',
-        })).subscribe( (result) => { this.formCleared() });
+        })).subscribe( () => { this.formCleared() });
   }
 
   //clear form after submited
@@ -212,7 +213,6 @@ export class AddTaskComponent implements OnInit {
         this.form.get('tasks_controlle')?.reset();
         this.tasksList = result;
         this.isValid_usernames=true;
-        console.log(this.tasksList);
         },
         (error) => {
           this.errors = error.error.message;

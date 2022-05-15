@@ -8,6 +8,11 @@
     background-color: #6A1FFF !important;
 }
 
+.autoComplete-invalid {
+    border: 1px solid #dc3545 !important;
+    border-radius: 5px !important;
+}
+
 
 /*
 textarea {
