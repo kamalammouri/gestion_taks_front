@@ -35,7 +35,7 @@ export class AuthService {
     return this.http.get(environment.api+'getUsers');
   }*/
 
-  getUserId(id:any): Observable<UserInfo[]>{
+  getUserInfo(id:any): Observable<UserInfo[]>{
     return this.http.post<UserInfo[]>(environment.api+'getUserId',id);
   }
 
@@ -62,6 +62,10 @@ export class AuthService {
 
   getTasklogs(date:any):Observable<any[]>{
     return this.http.post<any[]>(environment.api+'getTasklog',date);
+  }
+
+  getTasklogsTime(data:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'getTasklogTime',data);
   }
 
   getTasklogId(id:any):Observable<any[]>{

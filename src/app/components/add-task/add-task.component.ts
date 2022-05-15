@@ -60,6 +60,7 @@ export class AddTaskComponent implements OnInit {
    }
 
   ngOnInit(){
+    this.today = new Date().toISOString().split('T')[0];
 
     // if (!this.tokenService.loggedIn()) {
     //   this.router.navigate(['/login']);
@@ -73,9 +74,16 @@ export class AddTaskComponent implements OnInit {
     //   return;
     // }
 
-    this.authService.getUserId({'user_id':this.tokenService.getUserId()}).subscribe(result => {
+    this.authService.getUserInfo({'user_id':this.tokenService.getUserId()}).subscribe(result => {
       this.usersInfo = result;
     });
+
+    let data = { user_id : this.tokenService.getUserId() , date : this.today}
+    this.authService.getTasklogsTime(data).subscribe(result => {
+      console.log(result);
+     });
+
+
 
     /*this.authService.getUsers().subscribe(result => {
       this.usersList = result;
@@ -86,7 +94,6 @@ export class AddTaskComponent implements OnInit {
       this.projectsList=result;
     });
 
-    this.today = new Date().toISOString().split('T')[0];
 
     this.form = this.formBuilder.group(
       {
