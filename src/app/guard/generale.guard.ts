@@ -16,6 +16,8 @@ export class GeneraleGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
       if (!this.tokenService.loggedIn()) {
+          console.log('this.tokenService.loggedIn()',this.tokenService.loggedIn());
+
         this.tokenService.remove();
         this.router.navigate(['/login']);
         this.authState.setAuthState(false);

@@ -42,19 +42,22 @@ export class TokenService {
   }
 
   loggedIn(){
-    return this.isValid() && this.ExipredToken();
+    console.log('loggedIn',this.isValid())
+    return this.isValid();
   }
 
 
   private tokenExpired(token: string) {
-    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    const expiry = (JSON.parse(atob(token?.split('.')[1]))).exp;
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
   }
 
   ExipredToken() {
     const token:any = this.get();
-    if (this.tokenExpired(token)) {
-      return true;
+    if(token){
+      if (this.tokenExpired(token)) {
+        return true;
+      }
     }
     return false;
   }
