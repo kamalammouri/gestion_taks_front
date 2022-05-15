@@ -35,10 +35,10 @@ export class AddTaskComponent implements OnInit {
 
 
   /* variable for date input */
-  public today: any;
+  today: any;
 
-  public user_department: any;
-  public project_id: any;
+  user_department: any;
+  project_id: any;
   /* variable for valid last input (task) */
   isValid = false;
   isValid_usernames = false;
@@ -46,8 +46,9 @@ export class AddTaskComponent implements OnInit {
   submitted = false;
   data: any;
   data2: any;
-  public errors:any=null;
-  public successMsg:any=null;
+  allTasks:any = [];
+  errors:any=null;
+  successMsg:any=null;
 
   constructor(
     private authService: AuthService,
@@ -77,11 +78,14 @@ export class AddTaskComponent implements OnInit {
     this.authService.getUserInfo({'user_id':this.tokenService.getUserId()}).subscribe(result => {
       this.usersInfo = result;
     });
-
-    let data = { user_id : this.tokenService.getUserId() , date : this.today}
-    this.authService.getTasklogsTime(data).subscribe(result => {
-      console.log(result);
-     });
+    this.authService.getProject().subscribe(result => {
+      this.projectsList = result;
+    });
+    this.getTimeRest(this.today);
+    // let data = { user_id : this.tokenService.getUserId() , date : this.today}
+    // this.authService.getTasklogsTime(data).subscribe(result => {
+    //   console.log(result);
+    //  });
 
 
 
@@ -90,9 +94,6 @@ export class AddTaskComponent implements OnInit {
     });*/
 
 
-    this.authService.getProject().subscribe(result => {
-      this.projectsList=result;
-    });
 
 
     this.form = this.formBuilder.group(
@@ -135,6 +136,22 @@ export class AddTaskComponent implements OnInit {
     this.isValid_usernames=false;
   }
 */
+
+changeDate(date:any){
+  console.log('change date',date);
+  this.getTimeRest(date);
+}
+
+  getTimeRest(date:any){
+
+    return false;
+    // this.authService.getTasklogs({date: date}).subscribe(result => this.allTasks = result);
+    // console.log('allTasks',this.allTasks)
+
+    // this.allTasks = this.allTasks.filter((t:any) => console.log(t));
+  }
+
+
   selectEventProject(project:any,) {
     this.project_id=project.project_id;
     this.getTasks();

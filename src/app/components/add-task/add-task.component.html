@@ -54,7 +54,7 @@
                 <div *ngIf="isValid">
 
                     <div class="from-group p-1">
-                        <input name="date" [(ngModel)]="today" class="form-control" type="date" id="date_task " formControlName="date_controlle" [ngClass]="{ 'is-invalid': submitted && f['date_controlle'].errors }" required>
+                        <input name="date" [(ngModel)]="today" (change)="changeDate(today)" class="form-control" type="date" id="date_task" formControlName="date_controlle" [ngClass]="{ 'is-invalid': submitted && f['date_controlle'].errors }" required>
                     </div>
 
                     <div class="from-group p-1 ">
