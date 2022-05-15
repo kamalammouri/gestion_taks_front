@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
+
+  tokenIsInvalid = new BehaviorSubject<boolean>(false);
 
   constructor() { }
 
@@ -26,7 +29,7 @@ export class TokenService {
     if(token){
       const payload = this.payload(token);
       if(payload){
-        return (payload.iss==="https://sdt.mobiletic.com/api/login" || payload.iss==="http://127.0.0.1:8000/api/login")?true:false;
+        return (payload.iss==="https://sdt.mobiletic.com/api/login" || payload.iss==="http://127.0.0.1:8000/api/login") ? true : false;
       }
     }
     return false;
@@ -42,20 +45,20 @@ export class TokenService {
   }
 
   loggedIn(){
-    console.log('loggedIn',this.isValid())
     return this.isValid();
   }
 
 
-  private tokenExpired(token: string) {
+  private checkToken(token: string) {
     const expiry = (JSON.parse(atob(token?.split('.')[1]))).exp;
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
   }
 
-  ExipredToken() {
-    const token:any = this.get();
-    if(token){
-      if (this.tokenExpired(token)) {
+  exipredToken(token: string = '') {
+    let getToken:any;
+    token != '' ? getToken = token : getToken= this.get();
+    if(getToken){
+      if (this.checkToken(getToken)) {
         return true;
       }
     }

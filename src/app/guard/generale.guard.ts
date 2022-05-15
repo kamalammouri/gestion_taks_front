@@ -8,23 +8,21 @@ import { TokenService } from '../services/token.service';
   providedIn: 'root'
 })
 export class GeneraleGuard implements CanActivate {
+  isValidToken: boolean = true;
   constructor(private router: Router,private tokenService: TokenService,private authState: AuthStateService){
-
+    this.tokenService.tokenIsInvalid.subscribe(isValid => this.isValidToken = isValid)
   }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-      if (!this.tokenService.loggedIn()) {
-          console.log('this.tokenService.loggedIn()',this.tokenService.loggedIn());
-
-        this.tokenService.remove();
-        this.router.navigate(['/login']);
-        this.authState.setAuthState(false);
-        // return false;
+      if (!this.tokenService.loggedIn() || this.tokenService.exipredToken() || !this.isValidToken) {
+          this.tokenService.remove();
+          this.authState.setAuthState(false);
+          this.router.navigate(['/login']);
+          return false
       }
 
-      // this.router.navigate(['/dashbord']);
     return true;
   }
 

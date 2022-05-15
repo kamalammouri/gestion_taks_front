@@ -81,9 +81,16 @@ export class LoginComponent implements OnInit {
       (result) => {
         this.successMsg = result;
         setTimeout(() => { this.router.navigateByUrl("dashbord") }, 1500);
-        this.tokenService.set(this.successMsg.access_token);
-        this.authState.setAuthState(true);
-        this.router.navigate(['dashbord']);
+        console.log(this.tokenService.exipredToken(this.successMsg.access_token));
+
+        if(!this.tokenService.exipredToken(this.successMsg.access_token)){
+          this.tokenService.set(this.successMsg.access_token);
+          this.tokenService.tokenIsInvalid.next(true);
+          this.authState.setAuthState(true);
+          this.router.navigate(['dashbord']);
+        }else{
+          this.toast.error('SVP correcter votre fuseau horaire');
+        }
       },
       (error) => {
         this.errors = error.error.message;

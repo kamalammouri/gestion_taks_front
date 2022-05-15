@@ -14,17 +14,17 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(data:any){
-    return this.http.post(environment.api+'login',data);
+  login(data:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'login',data);
   }
 
-  logout(){
-    return this.http.get(environment.api+'logout');
+  logout():Observable<any[]>{
+    return this.http.get<any[]>(environment.api+'logout');
   }
 
 
-  add_user(user:any) {
-    return this.http.post(environment.api+'add_user',user);
+  add_user(user:any):Observable<any[]> {
+    return this.http.post<any[]>(environment.api+'add_user',user);
   }
 
   contacts(): Observable<any> {
@@ -60,19 +60,19 @@ export class AuthService {
     return this.http.post<any[]>(environment.api+'insertTasklog',data);
   }
 
-  getTasklogs(date:any){
-    return this.http.post(environment.api+'getTasklog',date);
+  getTasklogs(date:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'getTasklog',date);
   }
 
-  getTasklogId(id:any){
-    return this.http.post(environment.api+'getTasklogId',id);
+  getTasklogId(id:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'getTasklogId',id);
   }
 
-  updateTasklog(date:any){
-    return this.http.post(environment.api+'updateTasklog',date);
+  updateTasklog(date:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'updateTasklog',date);
   }
 
-  deleteTasklog(date:any){
-    return this.http.post(environment.api+'deleteTasklog',date);
+  deleteTasklog(date:any):Observable<any[]>{
+    return this.http.post<any[]>(environment.api+'deleteTasklog',date);
   }
 }
