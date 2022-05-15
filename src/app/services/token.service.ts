@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TokenService {
 
-  tokenIsInvalid = new BehaviorSubject<boolean>(false);
+  tokenIsInvalid = new BehaviorSubject<boolean>(true);
 
   constructor() { }
 
