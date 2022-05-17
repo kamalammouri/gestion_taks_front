@@ -108,3 +108,7 @@
 .widget-danger .widget-49-date-month {
     color: #F95062;
 }
+
+.bg-darkLight{
+    background-color: rgba(0, 0, 0, 0.24);
+}

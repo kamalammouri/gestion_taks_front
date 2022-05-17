@@ -9,7 +9,7 @@
                 <input id="date" name="date" [max]="max" [(ngModel)]="today" type="date" id="date" ngModel (ngModelChange)="dateChanged($event)">
             </div>
             <div class="col-lg-5 py-1">
-                <ng-autocomplete [disabled]="!disableDepartment" [(ngModel)]="clearDepartment" [data]="departments" [searchKeyword]="keyword_departments" placeholder="Choisir un département" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" (selected)='selectEvent($event)'
+                <ng-autocomplete [disabled]="!disableDepartment" [(ngModel)]="clearDepartment" [data]="departments" (selected)='selectEvent($event)' (inputChanged)='changeEvent($event)' [searchKeyword]="keyword_departments" placeholder="Choisir un département" [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" 
                     (inputCleared)="searchCleared()">
                 </ng-autocomplete>
 
@@ -121,9 +121,9 @@
                         <input name="task_log_date" [max]="max" class="form-control" type="date" id="task_log_date " formControlName="task_log_date" [ngClass]="{ 'is-invalid': submitted && f['task_log_date'].errors }" required>
                     </div>
                     <div class="modal-footer d-flex">
-                        <button *ngIf="this.userEdit" type="button" class="btn btn-outline-danger me-auto p-2 bd-highlight" (click)="openModal(templateConfirme)">Supprimer</button>
+                        <button *ngIf="userEdit" type="button" class="btn btn-outline-danger me-auto p-2 bd-highlight" (click)="openModal(templateConfirme)">Supprimer</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #fermer>Fermer</button>
-                        <button *ngIf="this.userEdit" type="button" class="btn btn-outline-success" (click)="updatetaskLog() ">Enregistrer</button>
+                        <button *ngIf="userEdit" type="button" class="btn btn-outline-success" (click)="updatetaskLog() ">Enregistrer</button>
                     </div>
                 </form>
 
@@ -133,7 +133,7 @@
 </div>
 
 
-<ng-template #templateConfirme class="pt-5" [hidden]="!this.userEdit">
+<ng-template #templateConfirme class="pt-5" [hidden]="!userEdit">
     <div class="modal-body text-center">
         <p>Voulez-vous confirmer ?</p>
         <button type="button" class="btn btn-danger mx-1" (click)="deletetaskLog()">Oui</button>

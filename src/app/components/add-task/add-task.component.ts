@@ -183,6 +183,10 @@ changeDate(date:any){
 
   }
 
+  UploadImage(){
+    this.toast.info('Upload Image');
+  }
+
   onSubmit(): void {
 
     this.submitted = true;
@@ -246,3 +250,4 @@ changeDate(date:any){
     }
   }
 }
+

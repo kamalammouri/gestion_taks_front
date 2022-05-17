@@ -1,11 +1,17 @@
-<div class="container">
+<div class="container" *ngIf="usersInfo">
     <div class="row pt-5 justify-content-center">
         <div class="col-lg-6 col-md-12">
             <form [formGroup]="form" class="form-task" (ngSubmit)="onSubmit()">
                 <!-- <h2 class="card-header p-3 text-center">Ajouter votre tâche</h2>-->
-                <div class="bg-white rounded shadow-sm pt-4  text-center">
-                    <img src="./assets/img/profile-min.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h2 class="mb-0">{{this.usersInfo?.user_username}}</h2>
+                <div class="bg-white rounded shadow-sm p-4 text-center" (click)="UploadImage()" >
+                    <div class="profilepic m-auto">
+                        <img src="./assets/img/profile-min.jpg" [alt]="usersInfo?.user_username + 'picture'" class="img-fluid rounded-circle img-thumbnail shadow-sm profilepic__image" style="cursor: pointer">
+                        <div class="profilepic__content">
+                            <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                            <span class="profilepic__text">Edit Profile</span>
+                        </div>
+                    </div>
+                    <h2 class="mb-0 mt-2">{{usersInfo?.user_username}}</h2>
                 </div>
                 <!-- <div class="form-group my-1">
                     <ng-autocomplete class="pb-2" [data]="usersList" [searchKeyword]="keyword_users" placeholder="Choisir un utilisateur" (selected)='selectEventUsername($event)' (inputChanged)='onChangeSearchUsername($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
