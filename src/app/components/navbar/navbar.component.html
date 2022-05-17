@@ -1,26 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light py-2">
-    <div class="container" [ngClass]="{disconet:this.loggedIn==false}">
+    <div class="container" [ngClass]="{disconet:loggedIn==false}">
         <a class="navbar-brand col-lg-3 col-sm-4 col-5 text-center m-auto">
             <img src="./assets/img/MOBILETIC_Logo.png" alt="mobiletic logo" class="navbar-logo w-75 m-auto">
         </a>
-        <button *ngIf="this.loggedIn" (click)="toggleNavbar()" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button *ngIf="loggedIn" (click)="toggleNavbar()" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars" style="color:#fff; font-size:28px;"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="{ 'show': navbarOpen }">
             <ul class="navbar-nav me-auto ps-5 mb-2 mb-lg-0 text-center ">
-                <li class="nav-item" *ngIf="this.loggedIn">
+                <li class="nav-item" *ngIf="loggedIn">
                     <a class="nav-link text-white" routerLinkActive="active" aria-current="page" routerLink="dashbord">Accueil</a>
                 </li>
                 <!--<li class="nav-item">
                     <a class="nav-link" routerLink="users" routerLinkActive="active" [hidden]="admin">Gestion des utilisateurs</a>
                 </li>
                 -->
-                <li class="nav-item" *ngIf="this.loggedIn">
+                <li class="nav-item" *ngIf="loggedIn">
                     <a class="nav-link text-white" routerLink="add-task" routerLinkActive="active">Ajouter une tâche</a>
                 </li>
 
             </ul>
-            <div class="d-flex" *ngIf="this.loggedIn">
+            <div class="d-flex" *ngIf="loggedIn">
                 <!-- Button trigger modal -->
                 <button (click)="logout($event)" type="button" class="btn btn-danger text-white px-4" routerLink="login">
                   Se déconnecter
