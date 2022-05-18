@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
       (result) => {
         this.successMsg = result;
         setTimeout(() => { this.router.navigateByUrl("dashbord") }, 1500);
-        console.log(this.tokenService.exipredToken(this.successMsg.access_token));
+        // console.log(this.tokenService.exipredToken(this.successMsg.access_token));
 
         if(!this.tokenService.exipredToken(this.successMsg.access_token)){
           this.tokenService.set(this.successMsg.access_token);

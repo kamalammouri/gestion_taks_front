@@ -52,6 +52,8 @@ export class TokenService {
   private checkToken(token: string) {
    if(token){
     const expiry = (JSON.parse(atob(token?.split('.')[1]))).exp;
+    // console.log("expiry",(Math.floor((new Date).getTime() / 1000)) - expiry);
+    
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
    }else{
     return true;
