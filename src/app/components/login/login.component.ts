@@ -85,11 +85,11 @@ export class LoginComponent implements OnInit {
 
         if(!this.tokenService.exipredToken(this.successMsg.access_token)){
           this.tokenService.set(this.successMsg.access_token);
-          this.tokenService.tokenIsInvalid.next(true);
+          this.tokenService.tokenValid.next(true);
           this.authState.setAuthState(true);
           this.router.navigate(['dashbord']);
         }else{
-          this.toast.error('SVP correcter votre fuseau horaire');
+          this.toast.warning('SVP couriger votre fuseau horaire et reconnectez vous');
         }
       },
       (error) => {

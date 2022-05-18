@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
 
-  tokenIsInvalid = new BehaviorSubject<boolean>(false);
+  tokenValid = new BehaviorSubject<boolean>(true);
 
-  constructor() { }
+  constructor() {
+    setInterval(() => {
+      if(this.exipredToken() || !this.loggedIn()){
+        this.tokenValid.next(false);
+      }else{
+        this.tokenValid.next(true);
+      }
+    }, 1000);
+  }
 
   handle(token:any){
     this.set(token);
@@ -50,19 +58,18 @@ export class TokenService {
 
 
   private checkToken(token: string) {
+   if(token){
     const expiry = (JSON.parse(atob(token?.split('.')[1]))).exp;
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+   }else{
+    return true;
+   }
   }
 
   exipredToken(token: string = '') {
     let getToken:any;
-    token != '' ? getToken = token : getToken= this.get();
-    if(getToken){
-      if (this.checkToken(getToken)) {
-        return true;
-      }
-    }
-    return false;
+    token != '' ? getToken = token : getToken = this.get();
+    return this.checkToken(getToken);
   }
 
   getUserId(){
