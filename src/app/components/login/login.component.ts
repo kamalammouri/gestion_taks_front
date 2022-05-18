@@ -85,7 +85,6 @@ export class LoginComponent implements OnInit {
 
         if(!this.tokenService.exipredToken(this.successMsg.access_token)){
           this.tokenService.set(this.successMsg.access_token);
-          this.tokenService.tokenValid.next(true);
           this.authState.setAuthState(true);
           this.router.navigate(['dashbord']);
         }else{

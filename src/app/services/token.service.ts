@@ -6,16 +6,8 @@ import { BehaviorSubject, } from 'rxjs';
 })
 export class TokenService {
 
-  tokenValid = new BehaviorSubject<boolean>(true);
-
   constructor() {
-    setInterval(() => {
-      if(this.exipredToken() || !this.loggedIn()){
-        this.tokenValid.next(false);
-      }else{
-        this.tokenValid.next(true);
-      }
-    }, 1000);
+    
   }
 
   handle(token:any){
