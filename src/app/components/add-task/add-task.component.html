@@ -3,13 +3,14 @@
         <div class="col-lg-6 col-md-12">
             <form [formGroup]="form" class="form-task" (ngSubmit)="onSubmit()">
                 <!-- <h2 class="card-header p-3 text-center">Ajouter votre tâche</h2>-->
-                <div class="bg-white rounded shadow-sm p-4 text-center" (click)="UploadImage()" >
+                <div class="bg-white rounded shadow-sm p-4 text-center" (click)="imgClick(imageInput)" >
                     <div class="profilepic m-auto">
                         <img src="./assets/img/profile-min.jpg" [alt]="usersInfo?.user_username + 'picture'" class="img-fluid rounded-circle img-thumbnail shadow-sm profilepic__image" style="cursor: pointer">
                         <div class="profilepic__content">
                             <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-                            <span class="profilepic__text">Edit Profile</span>
+                            <span class="profilepic__text">Change image</span>
                         </div>
+                        <input value="Change image" class="hidden" #imageInput type="file" accept="image/*" (change)="imgUpload(imageInput)"/>
                     </div>
                     <h2 class="mb-0 mt-2">{{usersInfo?.user_username}}</h2>
                 </div>
