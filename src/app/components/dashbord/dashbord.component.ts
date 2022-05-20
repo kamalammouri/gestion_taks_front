@@ -103,9 +103,7 @@ export class DashbordComponent implements OnInit {
   }
   
   changeEvent(value:any){
-    this.data = this.datafix.filter((item:any) => {
-      item.user_username.toLowerCase().includes(value) || item.dept_name.toLowerCase().includes(value) 
-    });
+    this.data = this.datafix.filter((item:any) => item.user_username.toLowerCase().includes(value));
   }
 
   //value.tasks.map((task:any) =>  task.project_short_name.icludes(value)
