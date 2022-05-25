@@ -99,11 +99,14 @@ export class DashbordComponent implements OnInit {
 
 
   selectEvent(department:any) {
-    // do something with selected item
-    this.filtreData = [];
-    this.data = this.filtreDepartment(department.dept_name);
+    this.data = this.datafix.filter((item:any) => item.dept_name == department.dept_name);
+  }
+  
+  changeEvent(value:any){
+    this.data = this.datafix.filter((item:any) => item.user_username.toLowerCase().includes(value));
   }
 
+  //value.tasks.map((task:any) =>  task.project_short_name.icludes(value)
   searchCleared() {
     this.data = this.datafix;
   }
@@ -131,17 +134,6 @@ export class DashbordComponent implements OnInit {
       });
   }
 
-  filtreDepartment(department:Number){
-    if(this.datafix){
-      for(let i of this.datafix){
-        if(i.dept_name === department){
-          this.filtreData.push(i);
-        }
-      }
-      return this.filtreData;
-    }
-    return "vide";
-  }
 
 
 
@@ -206,7 +198,7 @@ deletetaskLog() {
 
 
 openModal(template: TemplateRef<any>) {
-  this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  this.modalRef = this.modalService.show(template, {class: 'modal-sm pt-4 bg-darkLight'});
 }
 
 decline(): void {

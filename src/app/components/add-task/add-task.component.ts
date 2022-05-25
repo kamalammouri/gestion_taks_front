@@ -21,7 +21,8 @@ export class AddTaskComponent implements OnInit {
     title_controlle: new FormControl(''),
     description_controlle: new FormControl(''),
   });
-
+  //create variable tamplate reference
+  // imageInput: ElementRef;
   /* List data from api */
   usersList:any;
   usersInfo:any;
@@ -183,6 +184,10 @@ changeDate(date:any){
 
   }
 
+  UploadImage(){
+    this.toast.info('Upload Image');
+  }
+
   onSubmit(): void {
 
     this.submitted = true;
@@ -245,4 +250,14 @@ changeDate(date:any){
 
     }
   }
+
+  imgUpload(img:any) {
+    this.authService.uploadImage(img)
+      .subscribe(res => console.log(res),err => console.log(err));
+  }
+
+  imgClick(imageInput:any){
+    imageInput.click();
+  }
 }
+

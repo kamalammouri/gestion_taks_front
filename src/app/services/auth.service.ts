@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment'
@@ -11,7 +11,21 @@ import { UserInfo } from '../interfaces/user-info';
 })
 export class AuthService {
 
+  private readonly IMGUR_UPLOAD_URL = 'https://api.imgur.com/3/image';
+  private readonly clientId = 'c0db25611e74b79';
+
   constructor(private http: HttpClient) {
+  }
+
+  uploadImage(image:File):Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Client-ID ${this.clientId}`
+      }),
+    };
+    const formData = new FormData();
+    formData.append('image', image);
+    return this.http.post<any>(`${this.IMGUR_UPLOAD_URL}`, formData, httpOptions);
   }
 
   login(data:any):Observable<any[]>{
