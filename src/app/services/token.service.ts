@@ -6,15 +6,9 @@ import { BehaviorSubject, } from 'rxjs';
 })
 export class TokenService {
 
-<<<<<<< HEAD
   tokenIsInvalid = new BehaviorSubject<boolean>(true);
 
   constructor() { }
-=======
-  constructor() {
-    
-  }
->>>>>>> 56eaad5d827e5017fff2b6dfad6a8f70797ae1af
 
   handle(token:any){
     this.set(token);
@@ -59,7 +53,7 @@ export class TokenService {
    if(token){
     const expiry = (JSON.parse(atob(token?.split('.')[1]))).exp;
     // console.log("expiry",(Math.floor((new Date).getTime() / 1000)) - expiry);
-    
+
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
    }else{
     return true;
